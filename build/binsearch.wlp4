@@ -1,0 +1,32 @@
+int binsearch(int* arr, int n, int x) {
+  int l = 0;
+  int r = 0;
+  int mid = 0;
+  int ans = 0;
+  r = n - 1;
+  ans = 0-1;
+
+  while (l < r) {
+    mid = l + (r - l) / 2;
+    if (*(arr+mid) == x) {
+      ans = mid;
+      l = r;
+    } else {
+      if (*(arr+mid) < x) {
+        l = mid + 1;
+      } else {
+        r = mid;
+      }
+    }
+  }
+
+  return ans;
+}
+
+int wain(int* arr, int n) {
+    int x = 0;
+    int ans = 0;
+    x = 1;
+    ans = binsearch(arr, n, x);
+    return ans; 
+}

@@ -1,0 +1,500 @@
+; begin Prologue
+.import init
+.import new
+.import delete
+.import print
+lis $4 ; $4 will always hold 4
+.word 4
+lis $10 ; $10 will always hold address for print
+.word print
+lis $11 ; $11 will always hold 1
+.word 1
+sub $29 , $30 , $4 ; setup frame pointer
+;end Prologue and begin Body
+
+; push $31 to stack
+sw $31 , -4($30)
+sub $30, $30, $4
+lis $5
+.word wain
+jalr $5
+; pop to $31 from stack
+add $30, $30, $4
+lw $31 , -4($30)
+jr $31
+; start BOF procedures EOF
+; procedures procedure procedures
+; procedure INT ID LPAREN params RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+; Function : binsearch
+binsearch:
+; begin Prologue
+sub $29 , $30 , $4 ; assume caller-saves old frames
+; dcls dcls dcl BECOMES NUM SEMI
+; dcls dcls dcl BECOMES NUM SEMI
+; dcls dcls dcl BECOMES NUM SEMI
+; dcls dcls dcl BECOMES NUM SEMI
+; dcl l = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; dcl r = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; dcl mid = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; dcl ans = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; statements statements statement
+; statements statements statement
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(r)
+lis $3
+.word -4
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr expr MINUS term
+; expr term
+; term factor
+; factor ID
+lw $3, 8($29) ; load n
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor NUM
+lis $3
+.word 1
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sub $3, $5, $3
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(ans)
+lis $3
+.word -12
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr expr MINUS term
+; expr term
+; term factor
+; factor NUM
+lis $3
+.word 0
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor NUM
+lis $3
+.word 1
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sub $3, $5, $3
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; statement WHILE LPAREN test RPAREN LBRACE statements RBRACE
+binsearchloop0:
+; test expr LT expr
+; expr term
+; term factor
+; factor ID
+lw $3, 0($29) ; load l
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -4($29) ; load r
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+slt $3, $5, $3
+bne $3, $11, binsearchendWhile0
+; statements statements statement
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(mid)
+lis $3
+.word -8
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr expr PLUS term
+; expr term
+; term factor
+; factor ID
+lw $3, 0($29) ; load l
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term term SLASH factor
+; term factor
+; factor LAREN expr RPAREN
+; expr expr MINUS term
+; expr term
+; term factor
+; factor ID
+lw $3, -4($29) ; load r
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor ID
+lw $3, 0($29) ; load l
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sub $3, $5, $3
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; factor NUM
+lis $3
+.word 2
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+div $5, $3
+mflo $3
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+add $3, $5, $3
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+; test expr EQ expr
+; expr term
+; term factor
+; factor STAR factor
+; factor LAREN expr RPAREN
+; expr expr PLUS term
+; expr term
+; term factor
+; factor ID
+lw $3, 12($29) ; load arr
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor ID
+lw $3, -8($29) ; load mid
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+; int* + int
+mult $3, $4
+mflo $3 ; $3 <- sizeof(int)
+add $3, $5, $3
+lw $3, 0($3) ; $3 contains the loaded value
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, 4($29) ; load x
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+slt $6, $3, $5
+slt $7, $5, $3
+add $3, $6, $7
+sub $3, $11, $3
+bne $3, $11, binsearchelse1
+; statements statements statement
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(ans)
+lis $3
+.word -12
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -8($29) ; load mid
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(l)
+lis $3
+.word 0
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -4($29) ; load r
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+beq $0, $0, binsearchendif1
+binsearchelse1:
+; statements statements statement
+; statement IF LPAREN test RPAREN LBRACE statements RBRACE ELSE LBRACE statements RBRACE
+; test expr LT expr
+; expr term
+; term factor
+; factor STAR factor
+; factor LAREN expr RPAREN
+; expr expr PLUS term
+; expr term
+; term factor
+; factor ID
+lw $3, 12($29) ; load arr
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor ID
+lw $3, -8($29) ; load mid
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+; int* + int
+mult $3, $4
+mflo $3 ; $3 <- sizeof(int)
+add $3, $5, $3
+lw $3, 0($3) ; $3 contains the loaded value
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, 4($29) ; load x
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+slt $3, $5, $3
+bne $3, $11, binsearchelse2
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(l)
+lis $3
+.word 0
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr expr PLUS term
+; expr term
+; term factor
+; factor ID
+lw $3, -8($29) ; load mid
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; term factor
+; factor NUM
+lis $3
+.word 1
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+add $3, $5, $3
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+beq $0, $0, binsearchendif2
+binsearchelse2:
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(r)
+lis $3
+.word -4
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -8($29) ; load mid
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+binsearchendif2:
+binsearchendif1:
+beq $0, $0, binsearchloop0
+binsearchendWhile0:
+; expr term
+; term factor
+; factor ID
+lw $3, -12($29) ; load ans
+; Epilogue
+; deallocate parameters and local variables of wain
+add $30, $29, $4
+jr $31
+
+; procedures main
+; main INT WAIN LPAREN dcl COMMA dcl RPAREN LBRACE dcls statements RETURN expr SEMI RBRACE
+; Program type is: int*
+wain:
+; push $31 to stack
+sw $31 , -4($30)
+sub $30, $30, $4
+; push $2 to stack
+sw $2 , -4($30)
+sub $30, $30, $4
+lis $5
+.word init
+jalr $5
+; pop to $2 from stack
+add $30, $30, $4
+lw $2 , -4($30)
+; pop to $31 from stack
+add $30, $30, $4
+lw $31 , -4($30)
+; begin Prologue wain
+sub $29 , $30 , $4 ; setup frame pointer
+; push $1 to stack
+sw $1 , -4($30)
+sub $30, $30, $4
+; push $2 to stack
+sw $2 , -4($30)
+sub $30, $30, $4
+; dcls dcls dcl BECOMES NUM SEMI
+; dcls dcls dcl BECOMES NUM SEMI
+; dcl x = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; dcl ans = 0
+lis $5
+.word 0
+; push $5 to stack
+sw $5 , -4($30)
+sub $30, $30, $4
+; statements statements statement
+; statements statements statement
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(x)
+lis $3
+.word -8
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor NUM
+lis $3
+.word 1
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; statement lvalue BECOMES expr SEMI
+; lvalue ID
+; address of ID(ans)
+lis $3
+.word -12
+add $3, $3, $29
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID LPAREN arglist RPAREN
+; push $29 to stack
+sw $29 , -4($30)
+sub $30, $30, $4
+; push $31 to stack
+sw $31 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, 0($29) ; load arr
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -4($29) ; load n
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+; expr term
+; term factor
+; factor ID
+lw $3, -8($29) ; load x
+; push $3 to stack
+sw $3 , -4($30)
+sub $30, $30, $4
+lis $5
+.word binsearch
+jalr $5 
+lis $5
+.word 12
+add $30, $30, $5
+; pop to $31 from stack
+add $30, $30, $4
+lw $31 , -4($30)
+; pop to $29 from stack
+add $30, $30, $4
+lw $29 , -4($30)
+; pop to $5 from stack
+add $30, $30, $4
+lw $5 , -4($30)
+sw $3, 0($5)
+; expr term
+; term factor
+; factor ID
+lw $3, -12($29) ; load ans
+; Epilogue
+; deallocate parameters and local variables of wain
+add $30, $29, $4
+jr $31
+

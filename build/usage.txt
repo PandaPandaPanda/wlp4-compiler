@@ -1,0 +1,3 @@
+cat binsearch.wlp4 | ./wlp4scan | ./wlp4parse | ./wlp4gen > binsearch.merl
+
+cat binsearch.wlp4 | ./wlp4scan | ./wlp4parse | ./wlp4gen | ./asm > binsearch.mips
